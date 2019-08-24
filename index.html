@@ -13,6 +13,7 @@
             var request;
             var service;
             var markers = [];
+            
             function initialize()
             {
               var center = new google.maps.LatLng(53.3384214,-6.3933713);
@@ -22,42 +23,50 @@
                 zoom: 15
               }
             );
+            
              request = {
              location: center,
              radius:8847,
-             type: ['restaurant']
+             type: ['restaurants']
              };
-            InfoWindow = new google.maps.InfoWindow();
+            infoWindow = new google.maps.InfoWindow();
             service = new google.maps.places.PlacesService(map);
             service.nearbySearch(request, callback);
             
-            google.maps.event.addListener(map, 'rightclick',function(event){
-                map.setCenter(event.LatLng);
+            google.maps.event.addListener(map, 'rightclick', function(event){
+                map.setCenter(event.latLng);
                 clearResults(markers);
             
                  var request = {
-                 location: event.LatLng,
+                 location: event.latLng,
                  radius:8847,
                  type: ['restaurant']
                 };
                 
                 service.nearbySearch(request, callback);
-             } );
+             } )
             }
     
-                function callback(results, status){
-                if(status == google.maps.places.PlacesServiceStatus.ok){
+                function callback(results, status) {
+                if (status == google.maps.places.PlacesServiceStatus.OK){
                 for(var i= 0; i < results.length; i++){
-                markers.push(creatMarker(results[i]));
+                markers.push(createMarker(results[i]));
                 }
                }
              }
-               function creatMarker(place) {
-               var placeLoc = place.geometry.locations;
-               var marker = new google.maps.marker({
+               function createMarker(place) {
+               var placeLoc = place.geometry.location;
+               var marker = new google.maps.Marker({
                 map: map,
                 position: place.geometry.location
                 });
+                
+                google.maps.event.addListener(marker, 'click', function(){
+                    infoWindow.setContent(place.name);
+                    infoWindow.open(map, this);
+                });
+                
+                
                 return marker;
            }
            function clearResults(markers){
