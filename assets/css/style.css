@@ -102,7 +102,7 @@ nav ul li a:hover
         font-size: 30px;
         color: blue;
     }
-}
+
 
 .menu-toggle:before
 {
@@ -140,4 +140,4 @@ nav.active ul li a
 {
     margin: 0;
 }
-
+}
